@@ -29,17 +29,17 @@ $(() => {
     })
 
   // CREATE: form submit event to POST data to firebase
-  $('form').submit(() => {
+  $('form').submit((e) => {
+    e.preventDefault(); //// TODO: Make this not refresh the page
     // $.ajax({
     //   url: `${API_URL}.json`,
     //   method: 'POST',
     //   data: JSON.stringify({ task: 'I was posted!' })
     // })
     $.post(`${API_URL}.json`,
-      JSON.stringify({ task: 'I was posted!' })
+      JSON.stringify({ task: $(".form-control").val() })
     )
-    // TODO: Grab the form text
-    // TODO: Make this not refresh the page
+
   })
 
   $('tbody').on('click', '.delete', (e) => {
@@ -51,8 +51,22 @@ $(() => {
       method: 'DELETE'
     }).done(() => {
       row.remove()
+
+    })
+
+  $('tbody').on('click', '.complete', (e) => {
+    const row =  $(e.target).closest('tr')
+    const id = row.data('id')
+
+    $.ajax({
+      url: `${API_URL}/${id}.json`,
+      method: 'PATCH  '
+    }).done(() => {
+      row.add()
+
     })
   })
+})
 })
 
 // TODO:
